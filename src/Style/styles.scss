@@ -1,0 +1,139 @@
+@import "_config";
+@import "_SideNavigation";
+@import "_currency_info";
+@import "_Pagination";
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: "Silkscreen", sans-serif;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: darken($base-color, 10%);
+}
+
+.App {
+	display: flex;
+	min-height: 100vh;
+	.main {
+		flex-basis: 70%;
+		margin-top: 12rem;
+		section {
+			background-color: $base-color;
+			border-radius: 1rem;
+			padding: 1rem;
+			margin: 1rem;
+			.intervals {
+				display: flex;
+				margin: 1rem;
+				gap: 10px;
+				.interval-btn {
+					padding: 5px;
+					border-radius: 4px;
+					border: none;
+					outline: none;
+					background-color: lighten(
+						$secondary-color,
+						10
+					);
+					color: #000;
+					box-shadow: 1px 1px 5px
+						$secondary-color;
+					transition: 0.4s;
+					&:hover {
+						box-shadow: 3px 3px 5px
+							lighten(
+								$secondary-color,
+								10
+							);
+						background-color: $secondary-color;
+					}
+				}
+				.active {
+					box-shadow: 3px 3px 5px
+						lighten(
+							$secondary-color,
+							10
+						);
+					background-color: $secondary-color;
+					color: #d22929;
+				}
+			}
+		}
+	}
+}
+
+.search-box {
+	width: 100%;
+	position: relative;
+	input {
+		width: 100%;
+		padding: 13px;
+		font-size: 1rem;
+		background-color: lighten(
+			$base-color,
+			15
+		);
+		border: none;
+		outline: none;
+		color: #fdfdfd;
+		border-radius: 5px;
+	}
+	.suggestion-box {
+		position: absolute;
+		top: 3rem;
+		width: 100%;
+		list-style: none;
+		background-color: lighten(
+			$base-color,
+			15
+		);
+		color: #fdfdfd;
+		padding: 0;
+		margin-top: 0.5rem;
+		border-radius: 5px;
+		overflow: hidden;
+		li {
+			padding: 7px 10px;
+			cursor: pointer;
+			&:hover {
+				background-color: #f70808a2;
+			}
+		}
+	}
+}
+
+.title {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+	h3 {
+		font-size: 1.6rem;
+		color: #ffd61f;
+	}
+
+	h4 {
+		font-size: 1.2rem;
+		color: #fdfdfd;
+	}
+}
+.converter-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	padding-left: 19.5rem;
+	z-index: 1; 
+	pointer-events: auto;
+	color: #ffdd46;
+	font-size: 1rem;
+  }
+
+
