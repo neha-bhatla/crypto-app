@@ -1,7 +1,7 @@
 import React from "react";
 
 
-function Exchange_Info({ rows }) {
+function ExchangeInfo({ rows }) {
  const formatNumber = (number) => {
     const formattedNumber = Intl.NumberFormat(
         "en-US",
@@ -23,7 +23,7 @@ function Exchange_Info({ rows }) {
                <h4>Total(%)</h4>
            </li>
            {rows.map((row) => (
-               <li className="row row-no-hover">
+               <li key={row.exchangeId} className="row row-no-hover">
                    <span>{row.rank}</span>
                    <span>{row.name}</span>
                    <span>
@@ -46,6 +46,6 @@ function Exchange_Info({ rows }) {
 }
 
 
-export default Exchange_Info;
+export default ExchangeInfo;
 
 

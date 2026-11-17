@@ -5,7 +5,7 @@ const SideNavigation = () => {
    return (
        <aside className="sidenav">
            <div className="logo">
-               <h2>CoinHub<i class="fa-brands fa-bitcoin"></i></h2>
+               <h2>CoinHub<i className="fa-brands fa-bitcoin"></i></h2>
            </div>
            <Link to="/">
                Dashboard

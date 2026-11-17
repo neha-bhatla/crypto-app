@@ -1,10 +1,11 @@
 import { useState, useContext } from "react";
-import Currency_Context, {
+import CurrencyContext, {
    time_intervals,
 } from "../app_store/Currency_Context";
-import List_Context from "../app_store/List_Context";
+import ListContext from "../app_store/List_Context";
+import RequestStatus from "../app_components/RequestStatus";
 import Graph from "../app_components/Graph";
-import Currency_Info from "../app_components/Currency_Info";
+import CurrencyInfo from "../app_components/Currency_Info";
 
 
 
@@ -29,11 +30,10 @@ const shortDateOptions = {
 
 const Dash = () => {
    const ctx = useContext(
-       Currency_Context
+       CurrencyContext
    );
-   const currencies = useContext(
-       List_Context
-   ).currencyList;
+   const list = useContext(ListContext);
+   const currencies = list.currencyList;
    const [searchPhrase, setSearch] =
        useState("");
    const [suggestions, setSuggestions] =
@@ -44,7 +44,7 @@ const Dash = () => {
        setSearch(event.target.value);
        let same = currencies.filter(
            (currency) =>
-               currency.name
+               (currency.name + " " + currency.symbol)
                    .toLowerCase()
                    .includes(
                        event.target.value.toLowerCase()
@@ -76,7 +76,6 @@ const Dash = () => {
 
 
    const createLabels = () => {
-       console.log(ctx.interval);
        let options =
            ctx.interval === "1D"
                ? timeFormatOptions
@@ -101,6 +100,7 @@ const Dash = () => {
            <section>
                <div className="search-box">
                    <input
+                       aria-label="Search coins by name or symbol"
                        type="text"
                        placeholder="search for a coin!..."
                        value={searchPhrase}
@@ -114,14 +114,14 @@ const Dash = () => {
                                        key={
                                            currency.id
                                        }
-                                       onClick={() =>
+                                       ><button type="button" onClick={() =>
                                            selectedSearchedCurrency(
                                                currency.id
                                            )
                                        }>
                                        {
                                            currency.name
-                                       }
+                                       }</button>
                                    </li>
                                )
                            )}
@@ -151,7 +151,8 @@ const Dash = () => {
                        )
                    )}
                </div>
-               <Graph
+               <RequestStatus status={ctx.status} empty={!ctx.history.length} label="price history" onRetry={() => ctx.getHistory(ctx.selected_id, ctx.interval)} />
+               {ctx.status === "ready" && ctx.history.length > 0 && <Graph
                    data={ctx.history.map(
                        (item) => item.priceUsd
                    )}
@@ -161,13 +162,14 @@ const Dash = () => {
                            currency.id ===
                            ctx.selected_id
                    )}
-               />
+               />}
            </section>
            <section>
                <div className="title">
                    <h4>Top assets</h4>
                </div>
-               <Currency_Info />
+               <RequestStatus status={list.assetsStatus} empty={!currencies.length} label="assets" onRetry={list.getCurrencyList} />
+               <CurrencyInfo />
            </section>
        </main>
    );

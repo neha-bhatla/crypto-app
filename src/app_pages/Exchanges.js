@@ -4,17 +4,18 @@ import {
     useRef,
     useContext,
  } from "react";
+ import RequestStatus from "../app_components/RequestStatus";
  import ReactPaginate from "react-paginate";
- import List_Context from "../app_store/List_Context";
- import Exchange_Info from "../app_components/Exchange_Info";
+ import ListContext from "../app_store/List_Context";
+ import ExchangeInfo from "../app_components/Exchange_Info";
  
  
  const itemsPerPage = 20;
  
  
  const Exchanges = () => {
-    const { exchanges } = useContext(
-        List_Context
+    const { exchanges, exchangesStatus, getExchanges } = useContext(
+        ListContext
     );
  
  
@@ -35,7 +36,7 @@ import {
             exchanges.slice(rowsOffset, last_Offset)
         );
         setPageCount(
-            exchanges.length / itemsPerPage
+            Math.ceil(exchanges.length / itemsPerPage)
         );
     }, [rowsOffset, exchanges]);
  
@@ -55,7 +56,8 @@ import {
                 <div className="title">
                     <h4>Exchanges</h4>
                 </div>
-                <Exchange_Info
+                <RequestStatus status={exchangesStatus} empty={!exchanges.length} label="exchanges" onRetry={getExchanges} />
+                <ExchangeInfo
                     rows={currentRows}
                 />
                 <ReactPaginate

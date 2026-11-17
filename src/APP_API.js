@@ -1,14 +1,10 @@
 import axios from "axios";
 
+const client = axios.create({
+  baseURL: "https://api.coincap.io/v2",
+  timeout: 15000,
+});
 
-const BASE_URL = "https://api.coincap.io/v2";
-
-
-class APP_API {
-   static get = (path) => {
-       return axios.get(`${BASE_URL}${path}`);
-   };
+export default class APP_API {
+  static get = path => client.get(path);
 }
-
-
-export default APP_API;

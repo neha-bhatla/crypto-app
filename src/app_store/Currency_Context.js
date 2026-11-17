@@ -1,65 +1,40 @@
-import { useState, createContext } from "react";
+import { useState, useEffect, useRef, useCallback, createContext } from "react";
 import APP_API from "../APP_API";
 
+export const time_intervals = { "1D": 1, "1W": 7, "1M": 30, "6M": 180, "1Y": 365 };
+const CurrencyContext = createContext({});
 
-const base_case_interval = "1D";
-export const time_intervals = {
-   "1D": 1,
-   "1W": 7,
-   "1M": 30,
-   "6M": 180,
-   "1Y": 365,
+export const SelectedCurrencyProvider = ({ children }) => {
+  const [history, setHistory] = useState([]);
+  const [selectedInterval, setInterval] = useState("1D");
+  const [id, setId] = useState("bitcoin");
+  const [status, setStatus] = useState("loading");
+  const request = useRef(0);
+  const getHistory = useCallback(async (assetId, interval = "1D") => {
+    if (!assetId || !time_intervals[interval]) return;
+    const current = ++request.current;
+    setId(assetId);
+    setInterval(interval);
+    setHistory([]);
+    setStatus("loading");
+    const end = Date.now();
+    const start = end - time_intervals[interval] * 86400000;
+    try {
+      const response = await APP_API.get(`/assets/${encodeURIComponent(assetId)}/history?interval=${interval === "1D" ? "h2" : "d1"}&start=${start}&end=${end}`);
+      if (!Array.isArray(response.data.data)) throw new Error("Invalid history response");
+      if (current !== request.current) return;
+      setHistory(response.data.data);
+      setStatus("ready");
+    } catch {
+      if (current === request.current) setStatus("error");
+    }
+  }, []);
+  useEffect(() => {
+    getHistory("bitcoin");
+    const pendingRequest = request;
+    return () => { pendingRequest.current++; };
+  }, [getHistory]);
+  return <CurrencyContext.Provider value={{ history, getHistory, selected_id: id,
+    interval: selectedInterval, status }}>{children}</CurrencyContext.Provider>;
 };
-
-
-const Currency_Context = createContext({});
-
-
-export const SelectedCurrencyProvider = (
-   props
-) => {
-   const [history, setHistory] = useState([]);
-   const [selectedInterval, setInterval] =
-       useState(base_case_interval);
-   const [id, setId] = useState(null);
-
-
-   const getCurrencyHistory = async (
-       id,
-       interval = selectedInterval
-   ) => {
-       const interval_ =
-           interval === base_case_interval
-               ? "h2"
-               : "d1";
-       const start = new Date();
-       start.setDate(
-           start.getDate() - time_intervals[interval]
-       );
-       const end = new Date();
-       const url = `/assets/${id}/history?interval=${interval_}&start=${start.getTime()}&end=${end.getTime()}`;
-       const response = await APP_API.get(url);
-       setHistory(response.data.data);
-       setId(id);
-       setInterval(interval);
-   };
-
-
-   const values = {
-       history: history,
-       getHistory: getCurrencyHistory,
-       selected_id: id,
-       interval: selectedInterval,
-   };
-
-
-   return (
-       <Currency_Context.Provider
-           value={values}>
-           {props.children}
-       </Currency_Context.Provider>
-   );
-};
-
-
-export default Currency_Context;
+export default CurrencyContext;

@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
-import List_Context from "../app_store/List_Context";
-import Currency_Context from "../app_store/Currency_Context";
+import ListContext from "../app_store/List_Context";
+import CurrencyContext from "../app_store/Currency_Context";
 
 
-function Currency_Info() {
+function CurrencyInfo() {
    const { currencyList } = useContext(
-       List_Context
+       ListContext
    );
    const { getHistory } = useContext(
-       Currency_Context
+       CurrencyContext
    );
    return (
        <ul className="currency_table">
@@ -59,4 +59,4 @@ function Currency_Info() {
 }
 
 
-export default Currency_Info;
+export default CurrencyInfo;

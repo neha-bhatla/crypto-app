@@ -137,3 +137,12 @@ body {
   }
 
 
+
+.crypto-converter {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  input, select, button { padding: 0.8rem; border-radius: 6px; }
+  output { color: #ffdd46; font-size: 1.4rem; overflow-wrap: anywhere; }
+}
