@@ -253,3 +253,7 @@ button.asset-button:hover strong { color: var(--accent); }
 /* Keep visually hidden table labels inside the scrolling table boundary. */
 .table-scroll { position: relative; }
 .sr-only { top: 0; left: 0; }
+
+.not-found { padding: 32px; }
+.not-found > p:not(.eyebrow) { color: var(--muted); margin: 12px 0 24px; }
+.not-found > a { display: inline-block; }
