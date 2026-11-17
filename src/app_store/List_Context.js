@@ -8,12 +8,17 @@ export const CurrencyListProvider = ({ children }) => {
   const [exchanges, setExchanges] = useState([]);
   const [assetsStatus, setAssetsStatus] = useState("loading");
   const [exchangesStatus, setExchangesStatus] = useState("loading");
+  const [updatedAt, setUpdatedAt] = useState(null);
+  const [stale, setStale] = useState(false);
+  const [exchangesStale, setExchangesStale] = useState(false);
   const getCurrencyList = useCallback(async () => {
     setAssetsStatus("loading");
     try {
       const response = await APP_API.get("/assets");
       if (!Array.isArray(response.data.data)) throw new Error("Invalid assets response");
       setCurrencyList(response.data.data);
+      setUpdatedAt(response.updatedAt);
+      setStale(Boolean(response.stale));
       setAssetsStatus("ready");
     } catch {
       setAssetsStatus("error");
@@ -25,6 +30,7 @@ export const CurrencyListProvider = ({ children }) => {
       const response = await APP_API.get("/exchanges");
       if (!Array.isArray(response.data.data)) throw new Error("Invalid exchanges response");
       setExchanges(response.data.data);
+      setExchangesStale(Boolean(response.stale));
       setExchangesStatus("ready");
     } catch {
       setExchangesStatus("error");
@@ -32,7 +38,7 @@ export const CurrencyListProvider = ({ children }) => {
   }, []);
   useEffect(() => { getCurrencyList(); getExchanges(); }, [getCurrencyList, getExchanges]);
   return <ListContext.Provider value={{ currencyList, exchanges, assetsStatus,
-    exchangesStatus, getCurrencyList, getExchanges }}>{children}</ListContext.Provider>;
+    exchangesStatus, updatedAt, stale, exchangesStale, getCurrencyList, getExchanges }}>{children}</ListContext.Provider>;
 };
 
 export default ListContext;

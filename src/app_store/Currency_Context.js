@@ -9,6 +9,7 @@ export const SelectedCurrencyProvider = ({ children }) => {
   const [selectedInterval, setInterval] = useState("1D");
   const [id, setId] = useState("bitcoin");
   const [status, setStatus] = useState("loading");
+  const [stale, setStale] = useState(false);
   const request = useRef(0);
   const getHistory = useCallback(async (assetId, interval = "1D") => {
     if (!assetId || !time_intervals[interval]) return;
@@ -24,6 +25,7 @@ export const SelectedCurrencyProvider = ({ children }) => {
       if (!Array.isArray(response.data.data)) throw new Error("Invalid history response");
       if (current !== request.current) return;
       setHistory(response.data.data);
+      setStale(Boolean(response.stale));
       setStatus("ready");
     } catch {
       if (current === request.current) setStatus("error");
@@ -35,6 +37,6 @@ export const SelectedCurrencyProvider = ({ children }) => {
     return () => { pendingRequest.current++; };
   }, [getHistory]);
   return <CurrencyContext.Provider value={{ history, getHistory, selected_id: id,
-    interval: selectedInterval, status }}>{children}</CurrencyContext.Provider>;
+    interval: selectedInterval, status, stale }}>{children}</CurrencyContext.Provider>;
 };
 export default CurrencyContext;
