@@ -8,7 +8,11 @@ import "./Style/styles.scss";
 
 export default function App() {
   const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  useEffect(() => {
+    const titles = { "/": "Market overview", "/exchanges": "Exchange explorer", "/converter": "Crypto converter" };
+    document.title = `${titles[pathname] || "Page not found"} | CoinHub`;
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return (
     <div className="App">
       <a className="skip-link" href="#main-content">Skip to content</a>
