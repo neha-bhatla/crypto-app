@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Dash from "./app_pages/Dash";
 import Exchanges from "./app_pages/Exchanges";
 import SideNavigation from "./app_components/SideNavigation";
@@ -6,6 +7,8 @@ import CurrencyConverter from "./app_pages/Currency_Converter";
 import "./Style/styles.scss";
 
 export default function App() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
   return (
     <div className="App">
       <a className="skip-link" href="#main-content">Skip to content</a>

@@ -249,3 +249,7 @@ button.asset-button:hover strong { color: var(--accent); }
   .page-footer { font-size: 9px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+/* Keep visually hidden table labels inside the scrolling table boundary. */
+.table-scroll { position: relative; }
+.sr-only { top: 0; left: 0; }

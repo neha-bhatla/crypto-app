@@ -37,7 +37,7 @@ export default function Dash() {
       <div className="chart-toolbar"><div className="asset-heading">{selected?.image ? <img className="coin-image large" src={selected.image} alt=""/> : <span className="coin-placeholder">₿</span>}<div><h2>{selected?.name || "Bitcoin"} <span className="ticker">{selected?.symbol || "BTC"}</span></h2><p>Price performance · USD</p></div></div>
         <div className="intervals" aria-label="Chart period">{Object.keys(time_intervals).map(interval => <button key={interval} aria-pressed={interval === ctx.interval} className={interval === ctx.interval ? "active" : ""} onClick={() => ctx.getHistory(ctx.selected_id, interval)}>{interval}</button>)}</div>
       </div>
-      <div className="chart-price"><strong>{money(selected?.priceUsd)}</strong><span className={`change-badge ${selected?.changePercent24Hr >= 0 ? "positive" : "negative"}`}>{percent(selected?.changePercent24Hr)}</span><span className="muted">past 24h</span></div>
+      <div className="chart-price"><strong>{money(selected?.priceUsd)}</strong><span className={`change-badge ${selected?.changePercent24Hr == null ? "muted" : selected.changePercent24Hr >= 0 ? "positive" : "negative"}`}>{percent(selected?.changePercent24Hr)}</span><span className="muted">past 24h</span></div>
       {ctx.stale && <p className="notice">Showing saved chart data.</p>}
       <RequestStatus status={ctx.status} empty={!ctx.history.length} label="price history" onRetry={() => ctx.getHistory(ctx.selected_id, ctx.interval)}/>
       {ctx.status === "ready" && ctx.history.length > 0 && <Graph data={ctx.history.map(item => item.priceUsd)} labels={labels} selectedCurrency={selected}/>}
